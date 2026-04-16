@@ -71,7 +71,7 @@ export const getPassword = async (pwdType: PasswordType, axiosInstance: AxiosIns
         secretAccessKey: Config.getValue(ConfigOption.AWS_SECRET_ACCESS_KEY),
       },
     }
-    const client = new SecretsManagerClient([config])
+    const client = new SecretsManagerClient(config)
     const command = new GetSecretValueCommand({ SecretId: Config.getValue(ConfigOption.AWS_SECRET_NAME) })
     const result = await client.send(command)
     if (!result['SecretString']) {
