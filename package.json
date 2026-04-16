@@ -28,9 +28,7 @@
   "files": [
     "dist/"
   ],
-  "bin": {
-    "tatum-kms": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tatumio/tatum-kms.git"
