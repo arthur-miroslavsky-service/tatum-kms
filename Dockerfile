@@ -9,7 +9,9 @@ RUN apk add --no-cache \
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile --unsafe-perm
+RUN yarn cache clean \
+&& yarn install --frozen-lockfile --unsafe-perm --ignore-scripts \
+&& yarn add usb
 
 COPY . .
 
