@@ -1,31 +1,21 @@
-FROM node:18.20.5-alpine3.20 AS builder
+FROM node:20-alpine AS builder
 
-# Create app directory
 WORKDIR /opt/app
 
-RUN apk --virtual build-dependencies add \
+RUN apk add --no-cache \
     git libtool curl jq py3-configobj py3-pip py3-setuptools python3 python3-dev \
     g++ make libusb-dev eudev-dev linux-headers \
-&& ln -sf python3 /usr/bin/python \
-&& ln -s /lib/arm-linux-gnueabihf/libusb-1.0.so.0 libusb-1.0.dll
+ && ln -sf python3 /usr/bin/python
 
-COPY package*.json ./
-COPY yarn.lock ./
+COPY package.json yarn.lock ./
 
-# Installing dependencies
-RUN yarn cache clean \
-&& yarn install --frozen-lockfile --unsafe-perm --ignore-scripts \
-&& yarn add usb
-# Copying files from current directory
+RUN yarn install --frozen-lockfile --unsafe-perm
 
 COPY . .
 
-# Create build and link
 RUN yarn build
 
-# Switch to the non-root user
 USER node
 
 ENTRYPOINT ["node", "/opt/app/dist/index.js"]
-
 CMD ["daemon"]
